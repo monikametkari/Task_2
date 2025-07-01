@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Stopwatch - Task 02</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Segoe UI', sans-serif;
+    }
+
+    body {
+      background-color: #f4f4f4;
+      text-align: center;
+      padding-top: 100px;
+    }
+
+    .half-circle {
+      width: 300px;
+      height: 150px;
+      background: linear-gradient(to right, #000428, #004e92);
+      border-top-left-radius: 150px;
+      border-top-right-radius: 150px;
+      margin: 0 auto 30px;
+      position: relative;
+    }
+
+    .title {
+      color: white;
+      position: absolute;
+      top: 40%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      font-size: 1.5em;
+    }
+
+    h1 {
+      margin-bottom: 10px;
+      color: #333;
+    }
+
+    .stopwatch {
+      font-size: 3em;
+      margin: 20px 0;
+      color: #222;
+    }
+
+    .buttons {
+      margin-top: 20px;
+    }
+
+    button {
+      padding: 10px 15px;
+      font-size: 1em;
+      margin: 5px;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+
+    button:hover {
+      opacity: 0.8;
+    }
+
+    .start { background-color: #28a745; color: white; }
+    .pause { background-color: #ffc107; color: black; }
+    .reset { background-color: #dc3545; color: white; }
+    .lap { background-color: #007bff; color: white; }
+
+    .laps {
+      margin-top: 30px;
+      max-width: 300px;
+      margin-left: auto;
+      margin-right: auto;
+      text-align: left;
+    }
+
+    .laps li {
+      background: #eaeaea;
+      padding: 8px;
+      border-radius: 5px;
+      margin-bottom: 5px;
+      font-size: 1em;
+    }
+
+    .footer {
+      margin-top: 50px;
+      font-size: 0.9em;
+      color: #555;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="half-circle">
+    <div class="title">Monika Metkari</div>
+  </div>
+
+  <h1>Stopwatch - Task 02</h1>
+  <p><strong>  Web Application</p></strong>
+
+  <div class="stopwatch" id="display">00:00:00</div>
+
+  <div class="buttons">
+    <button class="start" onclick="start()">Start</button>
+    <button class="pause" onclick="pause()">Pause</button>
+    <button class="reset" onclick="reset()">Reset</button>
+    <button class="lap" onclick="lap()">Lap</button>
+  </div>
+
+  <ul class="laps" id="laps"></ul>
+
+  <div class="footer">© 2025  Monika Metkari At ProDigy Infotech Internship - Web Dev</div>
+
+  <script>
+    let timer;
+    let isRunning = false;
+    let startTime;
+    let elapsed = 0;
+
+    const display = document.getElementById("display");
+    const laps = document.getElementById("laps");
+
+    function updateTime() {
+      const now = Date.now();
+      const diff = now - startTime + elapsed;
+
+      const hours = Math.floor(diff / 3600000);
+      const minutes = Math.floor((diff % 3600000) / 60000);
+      const seconds = Math.floor((diff % 60000) / 1000);
+
+      display.textContent =
+        (hours < 10 ? "0" + hours : hours) + ":" +
+        (minutes < 10 ? "0" + minutes : minutes) + ":" +
+        (seconds < 10 ? "0" + seconds : seconds);
+    }
+
+    function start() {
+      if (!isRunning) {
+        startTime = Date.now();
+        timer = setInterval(updateTime, 1000);
+        isRunning = true;
+      }
+    }
+
+    function pause() {
+      if (isRunning) {
+        clearInterval(timer);
+        elapsed += Date.now() - startTime;
+        isRunning = false;
+      }
+    }
+
+    function reset() {
+      clearInterval(timer);
+      isRunning = false;
+      startTime = null;
+      elapsed = 0;
+      display.textContent = "00:00:00";
+      laps.innerHTML = "";
+    }
+
+    function lap() {
+      if (isRunning) {
+        const li = document.createElement("li");
+        li.textContent = "Lap: " + display.textContent;
+        laps.appendChild(li);
+      }
+    }
+  </script>
+
+</body>
+</html>
